@@ -1,35 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-
+import axios from "axios";
+import {useEffect, useState} from "react";
+import Cookies from 'js-cookie';
 function App() {
-  const [count, setCount] = useState(0)
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    useEffect(() => {
+        // Check if the user is already logged in by checking the session cookie
+        const sessionCookie = Cookies.get('yourSessionCookieName');
+
+        if (sessionCookie) {
+            setIsLoggedIn(true);
+        }
+    }, []);
+
+
+
+    const handleLogin = async () => {
+        try {
+            const response = await axios.post('https://analytics.cxp-integration.trustyou.com/api/v1/authentication/login', {
+                username: 'testdeveloper@trustyou.net',
+                password: 'T12345678!',
+            });
+
+            const { token } = response.data;
+
+            // Set the session cookie with the SSO token
+            Cookies.set('yourSessionCookieName', token);
+
+            setIsLoggedIn(true);
+            console.log("this is token",token)
+            // Redirect to Sisense
+            // window.location.href = `https://your-sisense-instance.com/app`;
+        } catch (error) {
+            console.error('Error generating SSO token:', error);
+        }
+    };
+
+    const handleLogout = () => {
+        // Remove the session cookie and update the state
+        Cookies.remove('yourSessionCookieName');
+        setIsLoggedIn(false);
+    };
+
+    return (
+        <div >
+            <h1>React SSO Example</h1>
+            {isLoggedIn ? (
+                <>
+                    <p>You are logged in. Redirecting...</p>
+                    <button onClick={handleLogout}>Logout</button>
+                </>
+            ) : (
+                <button onClick={handleLogin}>Login to Sisense</button>
+            )}
+        </div>
+    );
 }
 
 export default App
