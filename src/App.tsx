@@ -1,60 +1,28 @@
-import './App.css'
-import axios from "axios";
-import {useEffect, useState} from "react";
-import Cookies from 'js-cookie';
+import './App.css';
+import {useEffect} from 'react';
+import Login from './pages/login/login.tsx';
+import Dashboard from './pages/dashboard/dashboard.tsx';
+import {Routes, Route,useNavigate} from "react-router-dom";
+
 function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Check if the user is already logged in by checking the session cookie
-        const sessionCookie = Cookies.get('yourSessionCookieName');
+        const storage = localStorage.getItem('token');
 
-        if (sessionCookie) {
-            setIsLoggedIn(true);
+        if (storage) {
+            navigate('/dashboard');
+        } else {
+            navigate('/login');
         }
     }, []);
 
-
-
-    const handleLogin = async () => {
-        try {
-            const response = await axios.post('https://analytics.cxp-integration.trustyou.com/api/v1/authentication/login', {
-                username: 'testdeveloper@trustyou.net',
-                password: 'T12345678!',
-            });
-
-            const { token } = response.data;
-
-            // Set the session cookie with the SSO token
-            Cookies.set('yourSessionCookieName', token);
-
-            setIsLoggedIn(true);
-            console.log("this is token",token)
-            // Redirect to Sisense
-            // window.location.href = `https://your-sisense-instance.com/app`;
-        } catch (error) {
-            console.error('Error generating SSO token:', error);
-        }
-    };
-
-    const handleLogout = () => {
-        // Remove the session cookie and update the state
-        Cookies.remove('yourSessionCookieName');
-        setIsLoggedIn(false);
-    };
-
     return (
-        <div >
-            <h1>React SSO Example</h1>
-            {isLoggedIn ? (
-                <>
-                    <p>You are logged in. Redirecting...</p>
-                    <button onClick={handleLogout}>Logout</button>
-                </>
-            ) : (
-                <button onClick={handleLogin}>Login to Sisense</button>
-            )}
-        </div>
+        <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
     );
 }
 
