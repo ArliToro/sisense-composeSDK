@@ -1,0 +1,7 @@
+.widget-container {
+    flex-direction: column;
+    padding: 50px;
+    .filters-container{
+        margin-bottom: 25px;
+    }
+}
