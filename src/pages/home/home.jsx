@@ -2,9 +2,8 @@ import {useEffect, useState, useRef} from "react";
 import axiosInstance from "../../axios/axiosInstance.jsx";
 import {SisenseContextProvider} from "@sisense/sdk-ui";
 import DashboardList from "../../containers/dashboardList/dashboardList.jsx";
-import DashboardWidget from "../../containers/dashboard/dashboard-widget.jsx";
-import DashboardContext from "../../context/context.jsx"
-import Navbar from "../../containers/navbar/navbar.jsx"
+import DashboardWidget from "../dashboard/dashboard-widget.jsx";
+import Navbar from "../../containers/navbar/navbar.jsx";
 
 
 const Home = () => {
@@ -33,15 +32,13 @@ const Home = () => {
 
     return (
         <>
-            <DashboardContext>
                 <SisenseContextProvider url="https://analytics.cxp-integration.trustyou.com" token={tokenData.current}>
                     <div className={"dashboard-container"}>
-                        <Navbar dashboardInput={handleFilterDashboard}/>
+                        <Navbar/>
                         <DashboardList data={data} inputValue={filterDashboard}/>
                         <DashboardWidget/>
                     </div>
                 </SisenseContextProvider>
-            </DashboardContext>
         </>
     );
 };

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import { Alert, TextField } from '@mui/material';
 import axiosInstance from '../../axios/axiosInstance';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import './login.css';
 import logo from '../../assets/sisense-logo.svg';
 import wave from '../../assets/wave.svg';
@@ -20,7 +20,7 @@ const Login = () => {
             });
 
             localStorage.setItem('token', response.data.access_token);
-            navigate('/dashboard');
+            navigate('/home');
         } catch (error) {
             setUsername('');
             setPassword('');

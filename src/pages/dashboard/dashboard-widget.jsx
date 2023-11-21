@@ -4,7 +4,7 @@ import axiosInstance from "../../axios/axiosInstance.jsx";
 import * as DM from '../../generated/sample-ecommerce.ts';
 import {filters} from '@sisense/sdk-data';
 import {Context} from "../../context/context.jsx";
-import Filters from "../filters/filters.jsx";
+import Filters from "../../containers/filters/filters.jsx";
 import "./dashboard-widget.css"
 
 const DashboardWidgetContainer = () => {
